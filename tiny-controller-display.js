@@ -192,6 +192,15 @@ let modY = new Image();
 			rightStickUp.src     = spritePath("c_up");
 
 			leftTrigger.src = spritePath("lt");
+			leftBumper.src = spritePath("light_shield");
+
+			// leftSticktop.src  = spritePath("bottom_button");
+			// leftSticktopPressed.src = spritePath("bottom_button");
+			leftStickwellPressed.src = spritePath("up");
+
+			// rightSticktop.src = spritePath("mid_shield");
+			// rightSticktopPressed.src = spritePath("mid_shield");
+			rightStickwellPressed.src = spritePath("mid_shield");
 
 			rightBumper.src = spritePath("z");
 
@@ -200,7 +209,7 @@ let modY = new Image();
 			rightTriggerMid.src = spritePath("mid_shield");
 
 			startButton.src = spritePath("start");
-
+			// selectButton.src = spritePath("select_button");
 			
 			dirDown.src  = spritePath("down");
 			dirLeft.src  = spritePath("left");
@@ -248,7 +257,7 @@ let modY = new Image();
 
 let isBlink = (navigator.userAgent.toLowerCase().indexOf("chrom") != -1);
 
-const width = 57, height = 37, triggerArcHeight = 15;
+const width = 1920, height = 1080, triggerArcHeight = 15; //const width = 57, height = 37, triggerArcHeight = 15;
 const axisDeadzone = 0.25, buttonDeadzone = 0.125;
 
 function getNonNeutralPads(){
@@ -332,7 +341,8 @@ function updatePad(){
 			if(ly>0 || ry>0 || pad.buttons[13].pressed) buttonCtx.drawImage(dirDown, 0, 0);
 			if(ly<0 || ry<0 || pad.buttons[12].pressed) buttonCtx.drawImage(dirUp, 0, 0);
 			console.log(lx);
-		}else{
+		}
+		else{
 			let coeff = isPad()?1:2;
 			// if(x!=0 && y!=0){//octagonal gate
 			// 	coeff = 1;
@@ -344,18 +354,18 @@ function updatePad(){
 	}
 
 	//left stick
-	if(isPad()){
+	// if(isPad()){
 		if(pad.buttons[10].pressed)
-			uncoloredCtx.drawImage(leftStickwellPressed, 0, 0);
-		uncoloredCtx.drawImage(pad.buttons[10].pressed?leftSticktopPressed:leftSticktop, 2*pad.axes[0], 2*pad.axes[1]);
-	}
+			buttonCtx.drawImage(leftStickwellPressed, 0, 0);
+		// uncoloredCtx.drawImage(pad.buttons[10].pressed?leftSticktopPressed:leftSticktop, 2*pad.axes[0], 2*pad.axes[1]);
+	// }
 
 	//right stick
-	if(isPad()){
+	// if(isPad()){
 		if(pad.buttons[11].pressed)
-			uncoloredCtx.drawImage(rightStickwellPressed, 0, 0);
-		uncoloredCtx.drawImage(pad.buttons[11].pressed?rightSticktopPressed:rightSticktop, 2*pad.axes[2], 2*pad.axes[3]);
-	}
+			buttonCtx.drawImage(rightStickwellPressed, 0, 0);
+		// uncoloredCtx.drawImage(pad.buttons[11].pressed?rightSticktopPressed:rightSticktop, 2*pad.axes[2], 2*pad.axes[3]);
+	// }
 
 	//rectangle directional inputs
 	if(controllerGeo === Rectangle){
@@ -407,13 +417,13 @@ function updatePad(){
 				}
 			}
 
-			{//dpad layer
+			{//dpad layer 
 				let dpadPressed = false;
-				if(pad.buttons[14].pressed) {dpadPressed = true; buttonCtx.drawImage(rightStickLeft , 0, 0);}
-				if(pad.buttons[15].pressed) {dpadPressed = true; buttonCtx.drawImage(rightStickRight, 0, 0);}
+				if(pad.buttons[14].pressed) {dpadPressed = true; buttonCtx.drawImage(rightStickLeft , 0, 0);} 
+				if(pad.buttons[15].pressed) {dpadPressed = true; buttonCtx.drawImage(rightStickRight, 0, 0);} //rightStickRight
 				if(pad.buttons[13].pressed) {dpadPressed = true; buttonCtx.drawImage(rightStickDown , 0, 0);}
 				if(pad.buttons[12].pressed) {dpadPressed = true; buttonCtx.drawImage(rightStickUp   , 0, 0);}
-				if(dpadPressed) {input |= (InputModX | InputModY);}
+				// if(dpadPressed) {input |= (InputModX | InputModY);}
 			}
 
 			if((input & InputLeft  ) === InputLeft  ) buttonCtx.drawImage(dirLeft,         0, 0);
@@ -428,6 +438,7 @@ function updatePad(){
 			if((input & InputModY  ) === InputModY  ) buttonCtx.drawImage(modY,            0, 0);
 			if((input & InputShield) === InputShield) console.log("coordinate-based shield input...");
 			if((input & InputB     ) === InputB     ) console.log("coordinate-based b input...");
+			if((input & leftBumper  ) === leftBumper  ) buttonCtx.drawImage(leftBumper,            0, 0);
 
 			lastRectangleInput = input;
 		}else{
@@ -436,13 +447,13 @@ function updatePad(){
 			let rx = applyAxisDeadzone(pad.axes[2]);
 			let ry = applyAxisDeadzone(pad.axes[3]);
 
-			if(lx > 0) buttonCtx.drawImage(dirLeft, 0, 0);
-			if(lx < 0) buttonCtx.drawImage(dirRight, 0, 0);
+			if(lx > 0) buttonCtx.drawImage(dirRight, 0, 0);
+			if(lx < 0) buttonCtx.drawImage(dirLeft, 0, 0); //dirRight
 			if(ly > 0) buttonCtx.drawImage(dirDown, 0, 0);
 			if(ly < 0) buttonCtx.drawImage(dirUp, 0, 0);
 
-			if(rx > 0) buttonCtx.drawImage(rightStickLeft, 0, 0);
-			if(rx < 0) buttonCtx.drawImage(rightStickRight, 0, 0);
+			if(rx > 0) buttonCtx.drawImage(rightStickRight, 0, 0);
+			if(rx < 0) buttonCtx.drawImage(rightStickLeft, 0, 0); //rightStickRight
 			if(ry > 0) buttonCtx.drawImage(rightStickDown, 0, 0);
 			if(ry < 0) buttonCtx.drawImage(rightStickUp, 0, 0);
 		}
@@ -455,7 +466,7 @@ function updatePad(){
 	//face buttons
 	if(pad.buttons[0].pressed) buttonCtx.drawImage(bottomButton, 0, 0);
 	if(pad.buttons[1].pressed) buttonCtx.drawImage(rightButton, 0, 0);
-	if(pad.buttons[2].pressed) buttonCtx.drawImage(leftButton, 0, 0);
+	if(pad.buttons[2].pressed) buttonCtx.drawImage(leftButton, 0, 0); //rightButton
 	if(pad.buttons[3].pressed) buttonCtx.drawImage(topButton, 0, 0);
 	
 	//trigger arcs
